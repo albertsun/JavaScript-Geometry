@@ -1,5 +1,5 @@
 /* 
-Copyright Dow Jones & Company, Inc. All Rights Reserved
+Copyright 2011 Dow Jones & Company, Inc. All Rights Reserved
 Author: Albert Sun
 WSJ.com News Graphics
 
