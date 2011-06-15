@@ -1,7 +1,7 @@
 JavaScript-Geometry
 ===================
 
-JavaScript-Geometry is (the start) of a collection of computation geometry algorithms implemented in JavaScript and designed to run in any modern browser. To use it, just include the javascript file of the algorithm you want to use. Licensed under the Apache License, Version 2.0
+JavaScript-Geometry is (the start) of a collection of computation geometry algorithms implemented in JavaScript and designed to run in any modern browser. To use it, include the javascript files in the datastructures folder, and the javascript file of the algorithm you want to use. Licensed under the Apache License, Version 2.0
 
 
 For now it only implements one algorithm to find all intersections in a set of line segments in 2D.
