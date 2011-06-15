@@ -1,5 +1,5 @@
 /* 
-Copyright Dow Jones & Company, Inc. All Rights Reserved
+Copyright 2011 Dow Jones & Company, Inc. All Rights Reserved
 Author: Albert Sun
 WSJ.com News Graphics
 
@@ -105,7 +105,7 @@ var findIntersections = function(segments) {
         
         // if there's more than one segment at this point, it's an intersection point
         if (segmentset.length > 1) {
-            intersections.push([p, segmentset.values()]);
+            intersections.push({"loc": p, "segments": segmentset.values()});
         }
 
         var L_pC_p_values = L_pC_p.values(),
