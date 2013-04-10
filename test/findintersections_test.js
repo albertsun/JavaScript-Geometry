@@ -1,8 +1,4 @@
 /* 
-Copyright 2011 Dow Jones & Company, Inc. All Rights Reserved
-Author: Albert Sun
-WSJ.com News Graphics
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
@@ -19,15 +15,7 @@ See the License for the specific language governing permissions and
 /*jslint white: false, debug: false, devel: true, onevar: false, plusplus: false, browser: true, bitwise: false */
 /*global jQuery: false, $: false, WSJNG: false, js_cols: false, window: false */
 
-
-
-function handleNextPoint() {
-    eventpoint = event_points.popMin();
-    window.sweep_position = eventpoint.key[1];
-    handleEventPoint(eventpoint);
-    console.log("#event_points: "+event_points.getCount());
-    console.log("#sweep_segments: "+sweep_segments.getCount());
-}
+var canvas,ctx;
 
 function runTest(segments, b) {
     canvas.width = canvas.width; //clear canvas contents
@@ -49,8 +37,6 @@ function runTest(segments, b) {
         throw new Error("TEST FAILED! Expected to find "+b+" intersections, instead found "+num);
     }
 }
-
-var canvas,ctx;
 
 $(document).ready(function() {
 

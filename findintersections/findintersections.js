@@ -1,8 +1,4 @@
 /* 
-Copyright 2011 Dow Jones & Company, Inc. All Rights Reserved
-Author: Albert Sun
-WSJ.com News Graphics
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
