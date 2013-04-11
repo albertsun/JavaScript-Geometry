@@ -18,10 +18,23 @@ See the License for the specific language governing permissions and
 
 var canvas,ctx;
 
+var point = [
+  $V([0])
+];
+var line = [
+  $V([0]),
+  $V([1])
+];
 var triangle = [
-  [0,0],
-  [1,0],
-  [0.5, (Math.sqrt(3)/2)]
+  $V([0,0]),
+  $V([1,0]),
+  $V([0.5, (Math.sqrt(3)/2)])
+];
+var tetrahedron = [
+  $V([0, 0, 0]),
+  $V([1, 0, 0]),
+  $V([0.5, (Math.sqrt(3)/2), 0]),
+  $V([0.5, (Math.sqrt(3)/6), (Math.sqrt(6)/3)])
 ];
 
 function runTest() {
@@ -33,7 +46,7 @@ function runTest() {
   //     ctx.stroke();
   // }
   
-  drawTriangle(triangle, 200, 10, 10);
+  drawTriangle(flattenVectors(triangle), 200, 10, 10);
   var subdvision = barycentricSubdivision(triangle);
   _.each(subdvision, function(triangle) {
     drawTriangle(triangle, 200, 10, 10);

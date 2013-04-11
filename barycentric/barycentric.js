@@ -27,28 +27,28 @@ See the License for the specific language governing permissions and
 
   a 0-simplex looks like
   [
-    [0]
+    $V([0])
   ]
 
   a 1-simplex looks like
   [
-    [0],
-    [1]
+    $V([0]),
+    $V([1])
   ]
 
   a 2-simplex looks like (equilateral triangle)
   [
-    [0,0],
-    [1,0],
-    [0.5, (Math.sqrt(3)/2)]
+    $V([0,0]),
+    $V([1,0]),
+    $V([0.5, (Math.sqrt(3)/2)])
   ]
 
   a 3-simplex looks like (regular tetrahedron)
   [
-    [0, 0, 0],
-    [1, 0, 0],
-    [0.5, (Math.sqrt(3)/2), 0],
-    [0.5, (Math.sqrt(3)/6), (Math.sqrt(6)/3)],
+    $V([0, 0, 0]),
+    $V([1, 0, 0]),
+    $V([0.5, (Math.sqrt(3)/2), 0]),
+    $V([0.5, (Math.sqrt(3)/6), (Math.sqrt(6)/3)])
   ]
 */
 var barycentricSubdivision = function(simplex) {
@@ -64,6 +64,12 @@ var barycentricSubdivision = function(simplex) {
   },[]);
 };
 
+/* takes an array of vectors and turns it to an array of arrays */
+var flattenVectors = function(vectors) {
+  return _.map(vectors, function(v) { return v.elements; });
+};
+
+/* takes plain arrays, NOT sylvester vectors */
 var calculateMidpoint = function(v1, v2) {
   var n = v1.length;
   var midpoint = [];
@@ -72,11 +78,8 @@ var calculateMidpoint = function(v1, v2) {
   }
   return midpoint;
 };
+/* operates on sylvester vectors */
 var calculateBarycenter = function(vertices) {
-  /* convert to sylvester vertexes */
-  vertices = _.map(vertices, function(vertex) {
-    return $V(vertex);
-  });
   /* sum the vectors */
   var n = vertices[0].elements.length;
   var sum = _(vertices).reduce(function(memo, vertex){
@@ -84,16 +87,62 @@ var calculateBarycenter = function(vertices) {
   }, Vector.Zero(n));
   /* divide by number of vertices */
   var barycenter = sum.multiply(1/vertices.length);
-  return barycenter.elements;
+  return barycenter;
 };
 
-/* a facet is an (n-1)-face
-  or a collection of n vertices.
+/*
+  for a given simplex, return it's facets
+
+  a facet is an (n-1)-face
+  or a collection of n vertices
+
+  essentially (n choose n-1) if n is the number of vertices in the simplex
 */
 var findFacets = function(simplex) {
-
+  var facet_size = simplex.length - 1;
+  var indexes = sets(facet_size, _.range(0,simplex.length));
+  var get_at = function(idx) { return simplex[idx]; }
+  var facets = _.map(indexes, function(index_set) {
+    return _.map(index_set, get_at);
+  });
+  return facets;
 };
+/* for a numeric array, return all unique subsets (combinations) with cardinality k
+   aka, return the indexes in the simplex of the faces.
 
-if (!_.isEqual(calculateMidpoint([0,0],[1,0]), calculateBarycenter([[0,0],[1,0]]))) {
+  TODO: try caching results of the recursion
+*/
+function sets(k, set) {
+  if (k===0) return [{}];
+  // console.log(set);
+  if (_.isArray(set)) { set = _.reduce(set, function(memo, i) { memo[i]=true; return memo; }, {}); }
+  return _.chain( _.reduce(sets(k-1, set), function(memo, subset) {
+    // console.log(subset,memo);
+    if (_.isArray(subset)) { subset = _.reduce(subset, function(memo, i) { memo[i]=true; return memo; }, {}); }
+    memo = memo.concat(
+      _.map(set, function(v, el) {
+        // console.log(el);
+        new_subset = _.clone(subset);
+        if (new_subset[el] !== true) {
+          new_subset[el] = true;
+        }
+        return new_subset; 
+      })
+    );
+    // filter out subsets that are just reorderings
+    memo = _.uniq(memo, false, function(o) { return _.keys(o).sort().join("_"); });
+    return memo;
+  }, []) ).map(function(subset) {
+    return _.keys(subset);
+  }).filter(function(subset) {
+    if (subset.length === k) return true;
+  }).value();
+}
+
+if (!_.isEqual(
+            calculateMidpoint([0,0],[1,0]),
+            calculateBarycenter([$V([0,0]),$V([1,0])]).elements
+          )
+          ) {
   throw new Error("calculateMidpoint and calculateBarycenter should be the same for 2D vectors.");
 }
