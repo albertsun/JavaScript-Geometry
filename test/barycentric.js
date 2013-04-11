@@ -27,7 +27,7 @@ var point = [
 // ];
 var line = [
   $V([0, 0]),
-  $V([1, 1])
+  $V([1, 0])
 ];
 var triangle = [
   $V([0,0]),
@@ -43,18 +43,18 @@ var tetrahedron = [
 
 function runTest() {
 
-  drawLine(vectorsTo2DArrays(line), 200, 200, 200);
-  var line_subdivision = barycentricSubdivision(line);
+  // drawLine(vectorsTo2DArrays(line), 80, 500, 500);
+  // var line_subdivision = barycentricSubdivision(line);
+  var line_subdivision = repeatedBarycentricSubdivision(line, 5);
   _.each(line_subdivision, function(segment) {
-    drawLine(vectorsTo2DArrays(segment), 200, 200, 200);
+    drawLine(vectorsTo2DArrays(segment), 500, 50, 500);
   });
 
-  drawTriangle(vectorsTo2DArrays(triangle), 200, 10, 10);
-  var triangle_subdivision = barycentricSubdivision(triangle);
+  // drawTriangle(vectorsTo2DArrays(triangle), 400, 10, 10);
+  var triangle_subdivision = repeatedBarycentricSubdivision(triangle, 4);
   _.each(triangle_subdivision, function(triangle) {
-    drawTriangle(vectorsTo2DArrays(triangle), 200, 10, 10);
-  });
-  
+    drawTriangle(vectorsTo2DArrays(triangle), 400, 10, 10);
+  });  
 }
 
 $(document).ready(function() {
@@ -79,7 +79,7 @@ function drawLine(line, scalefactor, x_offset, y_offset, clear) {
   ctx.lineTo(x_offset+line[1][0]*scalefactor, y_offset+line[1][1]*scalefactor);
   ctx.stroke();
   _.each(line, function(vertex) {
-    drawPoint(x_offset+vertex[0]*scalefactor, y_offset+vertex[1]*scalefactor, 3);
+    drawPoint(x_offset+vertex[0]*scalefactor, y_offset+vertex[1]*scalefactor, 2);
   });
 }
 // triangle should be an
@@ -101,7 +101,7 @@ function drawTriangle(triangle, scalefactor, x_offset, y_offset, clear) {
   ctx.lineTo(x_offset+triangle[0][0]*scalefactor, y_offset+triangle[0][1]*scalefactor);
   ctx.stroke();
   _.each(triangle, function(vertex) {
-    drawPoint(x_offset+vertex[0]*scalefactor, y_offset+vertex[1]*scalefactor, 3);
+    drawPoint(x_offset+vertex[0]*scalefactor, y_offset+vertex[1]*scalefactor, 2);
   });
 }
 function drawPoint(x,y,size) {

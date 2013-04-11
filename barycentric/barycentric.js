@@ -69,8 +69,22 @@ var barycentricSubdivision = function(simplex) {
   });
   return simplices;
 };
+/* repeat barycentric subdivision n-times */
+var repeatedBarycentricSubdivision = function(simplex, n) {
+  function subdivideMultiple(simplex_array) {
+    return _.flatten(_.map(simplex_array, barycentricSubdivision), true);
+  }
+  var subdivision = [simplex];
+  for (var i=0; i<n; i++) {
+    subdivision = subdivideMultiple(subdivision);
+  }
+  return subdivision;
+};
 
-/* takes an array of vectors and turns it to an array of arrays */
+/*
+  takes an array of vectors and turns it to an array of arrays.
+  TODO: do the scaling to 2D of non 2D vectors 
+*/
 var vectorsTo2DArrays = function(vectors) {
   return _.map(vectors, function(v) { return v.elements; });
 };
