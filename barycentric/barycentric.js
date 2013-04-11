@@ -20,9 +20,7 @@ See the License for the specific language governing permissions and
 */
 // Sylvester.precision = 1e-12;
 
-/* takes a regular n-simplex and returns a set of (n+1)! n-simplices
-   whose union equals the original n-simplex
-
+/* 
   a simplex is defined as an array of it's vertices
 
   a 0-simplex looks like
@@ -50,22 +48,30 @@ See the License for the specific language governing permissions and
     $V([0.5, (Math.sqrt(3)/2), 0]),
     $V([0.5, (Math.sqrt(3)/6), (Math.sqrt(6)/3)])
   ]
+
+  barycentricSubdivision takes a regular n-simplex and returns an array of (n+1)! n-simplices
+  whose union equals the original n-simplex. 
 */
 var barycentricSubdivision = function(simplex) {
   var n = simplex.length - 1;
 
-  /* a 0-simplex's subdivision is itself. return a 1-deep copy. */
-  if (n === 0) return [_.clone(simplex[0])];
+  /* a 0-simplex's subdivision is itself. return an array with a 1-deep copy. */
+  if (n === 0) return [ [_.clone(simplex[0])] ];
 
+  /* otherwise find the simplex's facets, i.e. a triangle's edges, a tetrahedron's faces */
+  var facets = findFacets(simplex);
+  var subdivided_facets = _.map(facets, function(facet) { return barycentricSubdivision(facet); });
+  subdivided_facets = _.flatten(subdivided_facets, true);
   var barycenter = calculateBarycenter(simplex);
-  return _(simplex).reduce(function(subdivision, vertex, index, simplex) {
-
-
-  },[]);
+  var simplices = _.map(subdivided_facets, function(facet) {
+    facet.push(barycenter.dup());
+    return facet;
+  });
+  return simplices;
 };
 
 /* takes an array of vectors and turns it to an array of arrays */
-var flattenVectors = function(vectors) {
+var vectorsTo2DArrays = function(vectors) {
   return _.map(vectors, function(v) { return v.elements; });
 };
 
@@ -101,7 +107,7 @@ var calculateBarycenter = function(vertices) {
 var findFacets = function(simplex) {
   var facet_size = simplex.length - 1;
   var indexes = sets(facet_size, _.range(0,simplex.length));
-  var get_at = function(idx) { return simplex[idx]; }
+  var get_at = function(idx) { return simplex[idx]; };
   var facets = _.map(indexes, function(index_set) {
     return _.map(index_set, get_at);
   });

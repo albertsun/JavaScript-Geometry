@@ -19,11 +19,15 @@ See the License for the specific language governing permissions and
 var canvas,ctx;
 
 var point = [
-  $V([0])
+  $V([0, 0])
 ];
+// var line = [
+//   $V([0, 0]),
+//   $V([1, 0])
+// ];
 var line = [
-  $V([0]),
-  $V([1])
+  $V([0, 0]),
+  $V([1, 1])
 ];
 var triangle = [
   $V([0,0]),
@@ -39,18 +43,18 @@ var tetrahedron = [
 
 function runTest() {
 
-  // for (var i=0,len=segments.length; i<len; i++) {
-  //     ctx.beginPath();
-  //     ctx.moveTo(100*segments[i][0][0], 100*segments[i][0][1]);
-  //     ctx.lineTo(100*segments[i][1][0], 100*segments[i][1][1]);
-  //     ctx.stroke();
-  // }
-  
-  drawTriangle(flattenVectors(triangle), 200, 10, 10);
-  var subdvision = barycentricSubdivision(triangle);
-  _.each(subdvision, function(triangle) {
-    drawTriangle(triangle, 200, 10, 10);
+  drawLine(vectorsTo2DArrays(line), 200, 200, 200);
+  var line_subdivision = barycentricSubdivision(line);
+  _.each(line_subdivision, function(segment) {
+    drawLine(vectorsTo2DArrays(segment), 200, 200, 200);
   });
+
+  drawTriangle(vectorsTo2DArrays(triangle), 200, 10, 10);
+  var triangle_subdivision = barycentricSubdivision(triangle);
+  _.each(triangle_subdivision, function(triangle) {
+    drawTriangle(vectorsTo2DArrays(triangle), 200, 10, 10);
+  });
+  
 }
 
 $(document).ready(function() {
@@ -62,6 +66,22 @@ $(document).ready(function() {
 });
 
 
+function drawLine(line, scalefactor, x_offset, y_offset, clear) {
+  if (!scalefactor) scalefactor = 1;
+  if (!x_offset) x_offset = 0;
+  if (!y_offset) y_offset = 0;
+  if (clear === true) canvas.width = canvas.width; //clear canvas contents
+
+  console.log("Drawing line:", line);
+
+  ctx.beginPath();
+  ctx.moveTo(x_offset+line[0][0]*scalefactor, y_offset+line[0][1]*scalefactor);
+  ctx.lineTo(x_offset+line[1][0]*scalefactor, y_offset+line[1][1]*scalefactor);
+  ctx.stroke();
+  _.each(line, function(vertex) {
+    drawPoint(x_offset+vertex[0]*scalefactor, y_offset+vertex[1]*scalefactor, 3);
+  });
+}
 // triangle should be an
 // array with 3 elements
 // with each element being an array with two numbers
@@ -71,6 +91,8 @@ function drawTriangle(triangle, scalefactor, x_offset, y_offset, clear) {
   if (!x_offset) x_offset = 0;
   if (!y_offset) y_offset = 0;
   if (clear === true) canvas.width = canvas.width; //clear canvas contents
+
+  console.log("Drawing triangle:", triangle);
 
   ctx.beginPath();
   ctx.moveTo(x_offset+triangle[0][0]*scalefactor, y_offset+triangle[0][1]*scalefactor);
