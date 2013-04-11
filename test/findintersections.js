@@ -11,9 +11,11 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 */
 
-
 /*jslint white: false, debug: false, devel: true, onevar: false, plusplus: false, browser: true, bitwise: false */
 /*global jQuery: false, $: false, WSJNG: false, js_cols: false, window: false */
+
+
+/* test findIntersections */
 
 var canvas,ctx;
 
