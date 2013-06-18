@@ -29,10 +29,15 @@ var line = [
   $V([0, 0]),
   $V([1, 0])
 ];
+// var triangle = [
+//   $V([0,0]),
+//   $V([1,0]),
+//   $V([0.5, (Math.sqrt(3)/2)])
+// ];
 var triangle = [
-  $V([0,0]),
-  $V([1,0]),
-  $V([0.5, (Math.sqrt(3)/2)])
+  $V([1,1]),
+  $V([0,1]),
+  $V([0,0])
 ];
 var tetrahedron = [
   $V([0, 0, 0]),
@@ -45,13 +50,13 @@ function runTest() {
 
   // drawLine(vectorsTo2DArrays(line), 80, 500, 500);
   // var line_subdivision = barycentricSubdivision(line);
-  var line_subdivision = repeatedBarycentricSubdivision(line, 5);
+  var line_subdivision = repeatedBarycentricSubdivision(line, 3);
   _.each(line_subdivision, function(segment) {
     drawLine(vectorsTo2DArrays(segment), 500, 50, 500);
   });
 
   // drawTriangle(vectorsTo2DArrays(triangle), 400, 10, 10);
-  var triangle_subdivision = repeatedBarycentricSubdivision(triangle, 4);
+  var triangle_subdivision = repeatedBarycentricSubdivision(triangle, 3);
   _.each(triangle_subdivision, function(triangle) {
     drawTriangle(vectorsTo2DArrays(triangle), 400, 10, 10);
   });  
@@ -72,7 +77,7 @@ function drawLine(line, scalefactor, x_offset, y_offset, clear) {
   if (!y_offset) y_offset = 0;
   if (clear === true) canvas.width = canvas.width; //clear canvas contents
 
-  console.log("Drawing line:", line);
+  // console.log("Drawing line:", line);
 
   ctx.beginPath();
   ctx.moveTo(x_offset+line[0][0]*scalefactor, y_offset+line[0][1]*scalefactor);
@@ -92,7 +97,7 @@ function drawTriangle(triangle, scalefactor, x_offset, y_offset, clear) {
   if (!y_offset) y_offset = 0;
   if (clear === true) canvas.width = canvas.width; //clear canvas contents
 
-  console.log("Drawing triangle:", triangle);
+  // console.log("Drawing triangle:", triangle);
 
   ctx.beginPath();
   ctx.moveTo(x_offset+triangle[0][0]*scalefactor, y_offset+triangle[0][1]*scalefactor);
